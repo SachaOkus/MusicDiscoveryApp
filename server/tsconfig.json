@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext", // Modern module system for import/export
+    "moduleResolution": "node", // Node-style module resolution
+    "target": "ES6", // Target ECMAScript 6 or higher
+    "esModuleInterop": true, // Allows default imports from CommonJS modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "outDir": "./dist", // Output directory for compiled JS files
+    "rootDir": "./" // Root directory for TypeScript files
+  },
+  "include": ["server.ts"], // Include your server.ts file for compilation
+  "exclude": ["node_modules"] // Exclude node_modules
+}
