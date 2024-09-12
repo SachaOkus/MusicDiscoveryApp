@@ -1,73 +1,25 @@
-.home-page {
-  padding: 2rem;
-  text-align: center;
-
-  .music-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .music-item {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 16px;
-    width: 200px;
-    text-align: center;
-
-    .album-art {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    .track-info {
-      margin-top: 10px;
-
-      h2 {
-        font-size: 18px;
-        margin: 8px 0;
-      }
-
-      p {
-        font-size: 14px;
-        color: #555;
-      }
-
-      audio {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      a {
-        display: block;
-        margin-top: 10px;
-        color: #1db954;
-        text-decoration: none;
-      }
-    }
-  }
-}
-
+/* Main container for the home page */
 .home-container {
+  padding: 2rem;
   width: 100%;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
+/* Section headings */
 .featured-music,
 .trending-playlists {
   width: 100%;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: left;
+  }
 }
 
-h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-align: left;
-}
-
+/* Responsive grid layout for tracks and playlists */
 .track-list,
 .playlist-list {
   display: grid;
@@ -75,6 +27,7 @@ h2 {
   gap: 20px;
 }
 
+/* Shared styles for both track and playlist items */
 .track-item,
 .playlist-item {
   background-color: #f9f9f9;
@@ -82,40 +35,83 @@ h2 {
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+
+  /* Image styling */
+  img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+  }
+
+  /* Title styling */
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  /* Paragraph (text) styling */
+  p {
+    font-size: 0.9rem;
+    color: #666;
+  }
 }
 
-.track-item img,
-.playlist-item img {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 10px;
-  border-radius: 50%;
+/* Specific styles for track items (since they have audio and links) */
+.track-item {
+  audio {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.track-item h3,
-.playlist-item h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+/* Playlist item specific styles */
+.playlist-item {
+  /* Customize playlist-specific styles here if needed */
 }
 
-.track-item p,
-.playlist-item p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.track-item audio {
-  width: 100%;
-  margin-top: 10px;
-}
-
+/* General styling for links */
 a {
   display: inline-block;
   margin-top: 10px;
   color: #007bff;
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-a:hover {
-  text-decoration: underline;
+/* Mobile responsiveness: Adjust padding and column layout */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .track-list,
+  .playlist-list {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .track-list,
+  .playlist-list {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
 }

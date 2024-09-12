@@ -7,26 +7,25 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors()); // Enable CORS for all routes
 
-// Route to fetch data from the iTunes API
-app.get("/api/search", async (req, res) => {
-  const searchTerm = req.query.term || "radiohead"; // Default search term
-
+// Route to fetch trending songs from iTunes RSS feed
+app.get("/api/trending", async (req, res) => {
   try {
     const response = await fetch(
-      `https://itunes.apple.com/search?term=${searchTerm}&media=music&limit=10`
+      "https://itunes.apple.com/us/rss/topsongs/limit=10/json"
     );
-
     if (!response.ok) {
       throw new Error(
         `Error fetching data from iTunes API: ${response.statusText}`
       );
     }
-
-    const data = await response.json();
-    res.json(data); // Send the data back to the frontend
+    const data: any = await response.json();
+    console.log(data); // Log the full response to inspect it
+    res.json(data.feed.entry); // Assuming this is where the song data resides
   } catch (error) {
     console.error("Error fetching data from iTunes API:", error);
-    res.status(500).json({ error: "Failed to fetch data from iTunes API" });
+    res
+      .status(500)
+      .json({ error: "Failed to fetch trending songs from iTunes API" });
   }
 });
 
