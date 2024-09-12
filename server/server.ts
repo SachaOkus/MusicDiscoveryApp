@@ -19,7 +19,6 @@ app.get("/api/trending", async (req, res) => {
       );
     }
     const data: any = await response.json();
-    console.log(data); // Log the full response to inspect it
     res.json(data.feed.entry); // Assuming this is where the song data resides
   } catch (error) {
     console.error("Error fetching data from iTunes API:", error);
@@ -30,19 +29,24 @@ app.get("/api/trending", async (req, res) => {
 });
 
 // New route to fetch trending playlists from Openwhyd API
-app.get("/api/playlists", async (req, res) => {
+app.get("/api/openwhyd_playlists", async (req, res) => {
+  const genre = req.query.genre || "hiphop"; // Default to hiphop if no genre provided
+
   try {
-    const response = await fetch("https://openwhyd.org/api/trending"); // Openwhyd trending API endpoint
+    const response = await fetch(
+      `https://openwhyd.org/hot/${genre}?format=json`
+    );
     if (!response.ok) {
-      throw new Error(
-        `Error fetching data from Openwhyd API: ${response.statusText}`
-      );
+      throw new Error(`Error fetching playlists: ${response.statusText}`);
     }
-    const data: any = await response.json();
-    console.log(data); // Log the response to inspect it
-    res.json(data); // Send the playlist data to the frontend
+    const data = await response.json();
+    res.json(data); // Send the data back to the frontend
   } catch (error) {
-    console.error("Error fetching data from Openwhyd API:", error);
+    console.error(
+      "Error fetching playlists from Openwhyd API:",
+      error.message,
+      error.stack
+    );
     res
       .status(500)
       .json({ error: "Failed to fetch trending playlists from Openwhyd API" });

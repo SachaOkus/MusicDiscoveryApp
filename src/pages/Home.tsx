@@ -1,36 +1,76 @@
 import React, { useEffect, useState } from "react";
-import { fetchTrendingMusic } from "../API/Itunes"; // Import the function to fetch iTunes data
-import { Track } from "../components/Types/types"; // Import the Track type
-import "./_home.scss"; // Assuming you have a separate SCSS file for styling
+import { fetchTrendingMusic } from "../API/Itunes"; // Function to fetch iTunes data
+import { fetchOpenwhydPlaylists } from "../API/openwhyd"; // Function to fetch Openwhyd playlists
+import { Track, Playlist } from "../components/Types/types"; // Import types
+import "./_home.scss"; // Import the SCSS for styling
 
 const Home = () => {
-  const [tracks, setTracks] = useState<Track[]>([]); // State to store tracks data
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [tracks, setTracks] = useState<Track[]>([]); // State to store tracks data from iTunes
+  const [playlists, setPlaylists] = useState<{
+    hasMore: boolean;
+    tracks: Playlist[];
+  } | null>(null); // State to store playlists data from Openwhyd
 
+  const [selectedGenre, setSelectedGenre] = useState<string>("hiphop"); // Default genre is hip-hop
+
+  const [loadingTracks, setLoadingTracks] = useState<boolean>(true); // Loading state for tracks
+  const [loadingPlaylists, setLoadingPlaylists] = useState<boolean>(true); // Loading state for playlists
+  const [errorTracks, setErrorTracks] = useState<string | null>(null); // Error state for tracks
+  const [errorPlaylists, setErrorPlaylists] = useState<string | null>(null); // Error state for playlists
+
+  // Fetch trending tracks from iTunes
   useEffect(() => {
     const getTracks = async () => {
       try {
-        // Fetch music data from the backend (your server.js fetching from iTunes)
-        const data = await fetchTrendingMusic(); // You can change the default search term
-        console.log("Fetched tracks:", data); // Log the data for debugging
+        const data = await fetchTrendingMusic();
+        console.log("Fetched tracks:", data);
         setTracks(data);
       } catch (err) {
-        setError("Failed to fetch tracks.");
+        setErrorTracks("Failed to fetch tracks.");
       } finally {
-        setLoading(false);
+        setLoadingTracks(false);
       }
     };
 
     getTracks();
   }, []);
 
-  if (loading) {
+  // Fetch trending playlists from Openwhyd based on selected genre
+  // Fetch trending playlists from Openwhyd based on selected genre
+  useEffect(() => {
+    const getPlaylists = async () => {
+      try {
+        const data = await fetchOpenwhydPlaylists(selectedGenre); // Fetch playlists based on the genre
+        console.log("Fetched playlists:", data); // Log the entire response
+        setPlaylists(data); // Set the full playlists object, including "tracks" array
+      } catch (err) {
+        setErrorPlaylists("Failed to fetch playlists.");
+      } finally {
+        setLoadingPlaylists(false);
+      }
+    };
+
+    getPlaylists();
+  }, [selectedGenre]); // Re-fetch playlists whenever the genre changes
+
+  // Handle genre change
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(event.target.value);
+    setLoadingPlaylists(true);
+  };
+
+  // Handle loading and error states for both APIs
+  if (loadingTracks || loadingPlaylists) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  if (errorTracks || errorPlaylists) {
+    return (
+      <div>
+        {errorTracks && <div>{errorTracks}</div>}
+        {errorPlaylists && <div>{errorPlaylists}</div>}
+      </div>
+    );
   }
 
   return (
@@ -41,25 +81,24 @@ const Home = () => {
         <div className="track-list">
           {tracks.map((track: any, index: number) => (
             <div key={index} className="track-item">
-              {/* Display album artwork */}
               <img
-                src={track["im:image"][2].label} // 2 gives the largest image size
-                alt={track["im:name"].label} // Track name
+                src={track["im:image"][2]?.label || ""}
+                alt={track["im:name"]?.label || "Unknown track"}
                 className="album-art"
               />
               <div>
-                <h3>{track["im:name"].label}</h3> {/* Track name */}
-                <p>Artist: {track["im:artist"].label}</p> {/* Artist name */}
-                <p>Album: {track["im:collection"].label}</p> {/* Album name */}
+                <h3>{track["im:name"]?.label || "Unknown track"}</h3>
+                <p>Artist: {track["im:artist"]?.label || "Unknown artist"}</p>
+                <p>Album: {track["im:collection"]?.label || "Unknown album"}</p>
                 <audio controls>
                   <source
-                    src={track.link[1].attributes.href} // Preview URL
+                    src={track.link[1]?.attributes.href || ""}
                     type="audio/mpeg"
                   />
                   Your browser does not support the audio element.
                 </audio>
                 <a
-                  href={track.link[0].attributes.href} // iTunes link
+                  href={track.link[0]?.attributes.href || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="itunes-link"
@@ -69,6 +108,51 @@ const Home = () => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Genre Selector */}
+      <section className="genre-selector">
+        <h2>Select Genre</h2>
+        <select value={selectedGenre} onChange={handleGenreChange}>
+          <option value="hiphop">Hip Hop</option>
+          <option value="electro">Electro</option>
+          <option value="pop">Pop</option>
+          <option value="rock">Rock</option>
+          <option value="jazz">Jazz</option>
+          {/* Add more genres as needed */}
+        </select>
+      </section>
+
+      {/* Trending Playlists Section */}
+      <section className="trending-playlists">
+        <h2>Trending Playlists ({selectedGenre})</h2>
+        <div className="playlist-list">
+          {playlists?.tracks?.length ? (
+            playlists.tracks.map((playlist: Playlist, index: number) => (
+              <div key={index} className="playlist-item">
+                <img
+                  src={playlist.imgUrl || "https://via.placeholder.com/150"}
+                  alt={playlist.name || "Unknown playlist"}
+                  className="playlist-cover"
+                />
+                <div>
+                  <h3>{playlist.name || "Unknown playlist"}</h3>
+                  <p>Created by: {playlist.owner?.name || "Unknown owner"}</p>
+                  <a
+                    href={playlist.url || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="listen-link"
+                  >
+                    Listen to Playlist
+                  </a>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No playlists available.</p>
+          )}
         </div>
       </section>
     </div>

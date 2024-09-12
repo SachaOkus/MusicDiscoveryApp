@@ -32,6 +32,7 @@
   overflow-x: auto; /* Allow horizontal scrolling */
   gap: 20px; /* Space between playlists */
   padding-bottom: 10px; /* Extra padding for better scrolling */
+  scroll-snap-type: x mandatory; /* Smooth snapping effect */
 }
 
 .playlist-item {
@@ -42,6 +43,7 @@
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  scroll-snap-align: start; /* Make items snap to the start of the viewport */
 
   img {
     width: 150px;

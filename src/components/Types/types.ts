@@ -10,10 +10,14 @@ export interface Track {
   trackViewUrl: string;
 }
 
+interface PlaylistOwner {
+  name: string;
+}
+
 // Define a type for a playlist
 export interface Playlist {
   name: string;
   imgUrl: string;
-  ownerName: string;
+  owner: PlaylistOwner; // Nested owner object
   url: string;
 }
