@@ -12,10 +12,8 @@ export interface Track {
 
 // Define a type for a playlist
 export interface Playlist {
-  _id: string;
   name: string;
-  owner: {
-    name: string;
-  };
-  tracks: Track[];
+  imgUrl: string;
+  ownerName: string;
+  url: string;
 }

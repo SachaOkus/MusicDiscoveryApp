@@ -29,6 +29,26 @@ app.get("/api/trending", async (req, res) => {
   }
 });
 
+// New route to fetch trending playlists from Openwhyd API
+app.get("/api/playlists", async (req, res) => {
+  try {
+    const response = await fetch("https://openwhyd.org/api/trending"); // Openwhyd trending API endpoint
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching data from Openwhyd API: ${response.statusText}`
+      );
+    }
+    const data: any = await response.json();
+    console.log(data); // Log the response to inspect it
+    res.json(data); // Send the playlist data to the frontend
+  } catch (error) {
+    console.error("Error fetching data from Openwhyd API:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch trending playlists from Openwhyd API" });
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
