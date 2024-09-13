@@ -8,18 +8,23 @@ import "./_discover.scss";
 const Discover = () => {
   const [tracks, setTracks] = useState<Track[]>([]); // Ensure the type is Track[]
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
+  const [filterTerm, setFilterTerm] = useState(""); // State for filtering tracks
   const [selectedTrack, setSelectedTrack] = useState<any>(null); // State for the selected track
   const [artistDetails, setArtistDetails] = useState<any>(null); // State for artist details
   const [isModalOpen, setModalOpen] = useState(false); // Modal visibility state
+  const [loading, setLoading] = useState(false); // State to show loading while fetching
 
   // Fetch tracks from iTunes based on search term
   const handleSearch = async () => {
     if (!searchTerm) return; // Don't search if search term is empty
     try {
+      setLoading(true); // Set loading to true while fetching
       const data = await fetchItunesSearchResults(searchTerm); // Use the correct search function
       setTracks(data);
     } catch (err) {
       console.error("Error fetching tracks", err);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -29,6 +34,7 @@ const Discover = () => {
 
     // Search for the artist in MusicBrainz to get the MBID
     try {
+      setLoading(true); // Set loading to true while fetching artist details
       const searchResponse = await fetch(
         `https://musicbrainz.org/ws/2/artist/?query=artist:${track.artistName}&fmt=json`
       );
@@ -52,6 +58,8 @@ const Discover = () => {
       console.error("Error fetching artist details", err);
       setArtistDetails({ error: "Could not fetch artist details" });
       setModalOpen(true);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -74,28 +82,54 @@ const Discover = () => {
         <button onClick={handleSearch}>Search</button>
       </section>
 
+      {/* Filter Input */}
+      <section className="filter-bar">
+        <input
+          type="text"
+          placeholder="Filter by track name or artist..."
+          value={filterTerm}
+          onChange={(e) => setFilterTerm(e.target.value)} // Set filter term
+        />
+      </section>
+
       {/* Track List */}
       <section className="track-list">
-        {tracks.map((track: Track, index: number) => (
-          <div
-            key={index}
-            className="track-item"
-            onClick={() => handleTrackClick(track)}
-          >
-            <img
-              src={track.artworkUrl100 || "https://via.placeholder.com/150"}
-              alt={track.trackName}
-            />
-            <h3>{track.trackName}</h3>
-            <p>{track.artistName}</p>
-          </div>
-        ))}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          tracks
+            .filter(
+              (track) =>
+                track.trackName
+                  .toLowerCase()
+                  .includes(filterTerm.toLowerCase()) || // Filter by track name
+                track.artistName
+                  .toLowerCase()
+                  .includes(filterTerm.toLowerCase()) // Filter by artist name
+            )
+            .map((track: Track, index: number) => (
+              <div
+                key={index}
+                className="track-item"
+                onClick={() => handleTrackClick(track)}
+              >
+                <img
+                  src={track.artworkUrl100 || "https://via.placeholder.com/150"}
+                  alt={track.trackName}
+                />
+                <h3>{track.trackName}</h3>
+                <p>{track.artistName}</p>
+              </div>
+            ))
+        )}
       </section>
 
       {/* Modal for displaying artist details */}
       {isModalOpen && (
         <Modal onClose={handleCloseModal}>
-          {artistDetails ? (
+          {loading ? (
+            <p>Loading artist details...</p>
+          ) : artistDetails && !artistDetails.error ? (
             <div className="artist-details">
               <h2>{artistDetails.name}</h2>
               <p>Sort Name: {artistDetails["sort-name"] || "Not available"}</p>
@@ -143,7 +177,7 @@ const Discover = () => {
               )}
             </div>
           ) : (
-            <p>Loading artist details...</p>
+            <p>{artistDetails?.error || "Error loading artist details"}</p>
           )}
         </Modal>
       )}
