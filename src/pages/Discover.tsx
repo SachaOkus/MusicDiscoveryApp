@@ -98,15 +98,49 @@ const Discover = () => {
           {artistDetails ? (
             <div className="artist-details">
               <h2>{artistDetails.name}</h2>
+              <p>Sort Name: {artistDetails["sort-name"] || "Not available"}</p>
               <p>Born: {artistDetails["life-span"]?.begin || "N/A"}</p>
               <p>
                 Origin: {artistDetails["begin-area"]?.name || "Not available"}
               </p>
+              <p>Country: {artistDetails.country || "Not available"}</p>
+              <p>Gender: {artistDetails.gender || "Not available"}</p>
               <p>
                 Description:{" "}
                 {artistDetails.disambiguation || "No description available"}
               </p>
-              {/* Display more details if needed */}
+
+              {artistDetails.tags && artistDetails.tags.length > 0 ? (
+                <p>
+                  Genres:{" "}
+                  {artistDetails.tags.map((tag: any) => tag.name).join(", ")}
+                </p>
+              ) : (
+                <p>Genres: Not available</p>
+              )}
+
+              {artistDetails.relations && artistDetails.relations.length > 0 ? (
+                <div>
+                  <h4>Related Links:</h4>
+                  <ul>
+                    {artistDetails.relations.map(
+                      (relation: any, index: number) => (
+                        <li key={index}>
+                          <a
+                            href={relation.url.resource}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {relation.type}
+                          </a>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              ) : (
+                <p>No related links available</p>
+              )}
             </div>
           ) : (
             <p>Loading artist details...</p>
