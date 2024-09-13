@@ -28,7 +28,7 @@ app.get("/api/trending", async (req, res) => {
   }
 });
 
-// New route to fetch trending playlists from Openwhyd API
+// Route to fetch trending playlists from Openwhyd API
 app.get("/api/openwhyd_playlists", async (req, res) => {
   const genre = req.query.genre || "hiphop"; // Default to hiphop if no genre provided
 
@@ -50,6 +50,50 @@ app.get("/api/openwhyd_playlists", async (req, res) => {
     res
       .status(500)
       .json({ error: "Failed to fetch trending playlists from Openwhyd API" });
+  }
+});
+
+// New route to fetch artist metadata from MusicBrainz API using correct endpoint
+app.get("/api/musicbrainz/artist/:mbid", async (req, res) => {
+  const { mbid } = req.params; // MusicBrainz artist ID (MBID)
+
+  try {
+    const response = await fetch(
+      `http://musicbrainz.org/ws/2/artist/${mbid}?fmt=json`
+    );
+    if (!response.ok) {
+      throw new Error(`Error fetching artist data: ${response.statusText}`);
+    }
+
+    const artistData = await response.json();
+    res.json(artistData); // Send artist metadata back to the frontend
+  } catch (error) {
+    console.error("Error fetching artist data from MusicBrainz:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch artist data from MusicBrainz API" });
+  }
+});
+
+// New route to fetch album metadata from MusicBrainz API using correct endpoint
+app.get("/api/musicbrainz/album/:mbid", async (req, res) => {
+  const { mbid } = req.params; // MusicBrainz album (release) ID (MBID)
+
+  try {
+    const response = await fetch(
+      `http://musicbrainz.org/ws/2/release/${mbid}?fmt=json`
+    );
+    if (!response.ok) {
+      throw new Error(`Error fetching album data: ${response.statusText}`);
+    }
+
+    const albumData = await response.json();
+    res.json(albumData); // Send album metadata back to the frontend
+  } catch (error) {
+    console.error("Error fetching album data from MusicBrainz:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch album data from MusicBrainz API" });
   }
 });
 

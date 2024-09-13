@@ -37,7 +37,7 @@ const Home = () => {
   useEffect(() => {
     const getPlaylists = async () => {
       try {
-        const data = await fetchOpenwhydPlaylists(selectedGenre); // Fetch playlists based on the genre
+        const data = await fetchOpenwhydPlaylists(selectedGenre.toLowerCase()); // Ensure the genre is lowercase
         setPlaylists(data); // Set the full playlists object, including "tracks" array
       } catch (err) {
         setErrorPlaylists("Failed to fetch playlists.");
@@ -50,8 +50,9 @@ const Home = () => {
 
   // Handle genre change
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedGenre(event.target.value);
-    setLoadingPlaylists(true);
+    const newGenre = event.target.value.toLowerCase(); // Convert to lowercase
+    setSelectedGenre(newGenre); // Update selected genre
+    setLoadingPlaylists(true); // Set loading state for playlists
   };
 
   // Handle loading and error states for both APIs
@@ -121,7 +122,7 @@ const Home = () => {
 
       {/* Trending Playlists Section */}
       <section className="trending-playlists">
-        <h2>Trending Playlists ({selectedGenre})</h2>
+        <h2>Trending Playlist ({selectedGenre})</h2>
         <div className="playlist-list">
           {playlists?.tracks?.length ? (
             playlists.tracks.map((playlist: any, index: number) => (
@@ -143,7 +144,7 @@ const Home = () => {
                     rel="noopener noreferrer"
                     className="listen-link"
                   >
-                    Listen to Playlist
+                    Listen to Song
                   </a>
                 </div>
               </div>
