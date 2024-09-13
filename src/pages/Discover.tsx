@@ -27,15 +27,31 @@ const Discover = () => {
   const handleTrackClick = async (track: any) => {
     setSelectedTrack(track);
 
-    // Use artist name from the track and search MusicBrainz for the artist
-    const artistName = track.artistName;
-
+    // Search for the artist in MusicBrainz to get the MBID
     try {
-      const artistData = await fetchMusicBrainzArtist(artistName); // Pass artistName to the MusicBrainz API
-      setArtistDetails(artistData);
-      setModalOpen(true); // Open the modal to show artist details
+      const searchResponse = await fetch(
+        `https://musicbrainz.org/ws/2/artist/?query=artist:${track.artistName}&fmt=json`
+      );
+      if (!searchResponse.ok) {
+        throw new Error("Error fetching artist from MusicBrainz");
+      }
+      const searchData = await searchResponse.json();
+
+      if (searchData.artists && searchData.artists.length > 0) {
+        const artistId = searchData.artists[0].id; // Get the first result's MBID
+
+        // Fetch detailed artist data using the MBID
+        const artistData = await fetchMusicBrainzArtist(artistId);
+        setArtistDetails(artistData);
+        setModalOpen(true); // Open the modal to show artist details
+      } else {
+        setArtistDetails({ error: "Artist not found" });
+        setModalOpen(true); // Open the modal with the error
+      }
     } catch (err) {
       console.error("Error fetching artist details", err);
+      setArtistDetails({ error: "Could not fetch artist details" });
+      setModalOpen(true);
     }
   };
 
@@ -82,9 +98,15 @@ const Discover = () => {
           {artistDetails ? (
             <div className="artist-details">
               <h2>{artistDetails.name}</h2>
-              <p>Born: {artistDetails.lifeSpan?.begin || "N/A"}</p>
-              <p>Biography: {artistDetails.bio || "Biography not available"}</p>
-              {/* Display other artist details as needed */}
+              <p>Born: {artistDetails["life-span"]?.begin || "N/A"}</p>
+              <p>
+                Origin: {artistDetails["begin-area"]?.name || "Not available"}
+              </p>
+              <p>
+                Description:{" "}
+                {artistDetails.disambiguation || "No description available"}
+              </p>
+              {/* Display more details if needed */}
             </div>
           ) : (
             <p>Loading artist details...</p>
