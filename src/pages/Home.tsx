@@ -23,7 +23,6 @@ const Home = () => {
     const getTracks = async () => {
       try {
         const data = await fetchTrendingMusic();
-        console.log("Fetched tracks:", data);
         setTracks(data);
       } catch (err) {
         setErrorTracks("Failed to fetch tracks.");
@@ -31,17 +30,14 @@ const Home = () => {
         setLoadingTracks(false);
       }
     };
-
     getTracks();
   }, []);
 
-  // Fetch trending playlists from Openwhyd based on selected genre
   // Fetch trending playlists from Openwhyd based on selected genre
   useEffect(() => {
     const getPlaylists = async () => {
       try {
         const data = await fetchOpenwhydPlaylists(selectedGenre); // Fetch playlists based on the genre
-        console.log("Fetched playlists:", data); // Log the entire response
         setPlaylists(data); // Set the full playlists object, including "tracks" array
       } catch (err) {
         setErrorPlaylists("Failed to fetch playlists.");
@@ -49,7 +45,6 @@ const Home = () => {
         setLoadingPlaylists(false);
       }
     };
-
     getPlaylists();
   }, [selectedGenre]); // Re-fetch playlists whenever the genre changes
 
@@ -129,18 +124,21 @@ const Home = () => {
         <h2>Trending Playlists ({selectedGenre})</h2>
         <div className="playlist-list">
           {playlists?.tracks?.length ? (
-            playlists.tracks.map((playlist: Playlist, index: number) => (
+            playlists.tracks.map((playlist: any, index: number) => (
               <div key={index} className="playlist-item">
                 <img
-                  src={playlist.imgUrl || "https://via.placeholder.com/150"}
+                  src={
+                    playlist.img || "https://via.placeholder.com/150" // Use the correct 'img' field from the API response
+                  }
                   alt={playlist.name || "Unknown playlist"}
                   className="playlist-cover"
                 />
                 <div>
                   <h3>{playlist.name || "Unknown playlist"}</h3>
-                  <p>Created by: {playlist.owner?.name || "Unknown owner"}</p>
+                  <p>Created by: {playlist.uNm || "Unknown owner"}</p>{" "}
+                  {/* Use 'uNm' for owner */}
                   <a
-                    href={playlist.url || "#"}
+                    href={playlist.trackUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="listen-link"
