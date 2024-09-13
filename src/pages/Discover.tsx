@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { fetchItunesSearchResults } from "../API/Itunes"; // Use search function instead of trending
 import { fetchMusicBrainzArtist } from "../API/musicbrainz"; // Import MusicBrainz API
 import Modal from "../components/Modal/Modal"; // Modal component for showing artist details
+import { Track } from "../components/Types/types";
+import "./_discover.scss";
 
 const Discover = () => {
-  const [tracks, setTracks] = useState([]); // State for iTunes tracks
+  const [tracks, setTracks] = useState<Track[]>([]); // Ensure the type is Track[]
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
   const [selectedTrack, setSelectedTrack] = useState<any>(null); // State for the selected track
   const [artistDetails, setArtistDetails] = useState<any>(null); // State for artist details
@@ -58,13 +60,16 @@ const Discover = () => {
 
       {/* Track List */}
       <section className="track-list">
-        {tracks.map((track, index) => (
+        {tracks.map((track: Track, index: number) => (
           <div
             key={index}
             className="track-item"
             onClick={() => handleTrackClick(track)}
           >
-            <img src={track.artworkUrl100} alt={track.trackName} />
+            <img
+              src={track.artworkUrl100 || "https://via.placeholder.com/150"}
+              alt={track.trackName}
+            />
             <h3>{track.trackName}</h3>
             <p>{track.artistName}</p>
           </div>

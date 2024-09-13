@@ -1,19 +1,30 @@
-.track-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+/* _discover.scss or any SCSS file for the Discover page */
+.discover-container {
+  padding: 2rem; /* Adjust padding as needed */
 }
 
-.track-item {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+.search-bar {
+  margin-top: 3rem; /* Add margin to move it below the navigation bar */
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Space between the input and button */
 
-  .album-art {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-bottom: 10px;
+  input {
+    padding: 0.5rem;
+    width: 100%; /* Full width input */
+    max-width: 400px; /* Set max width as needed */
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
   }
 }
