@@ -4,18 +4,24 @@
 }
 
 .search-bar {
-  margin-top: 3rem; /* Add margin to move it below the navigation bar */
   display: flex;
-  align-items: center;
-  gap: 1rem; /* Space between the input and button */
+  flex-direction: column; /* Stack the input and button vertically */
+  align-items: flex-start; /* Align left side */
+  gap: 0.5rem; /* Space between input and button */
+  margin-top: 3rem;
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
 
   input {
     padding: 0.5rem;
-    width: 100%; /* Full width input */
-    max-width: 400px; /* Set max width as needed */
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
+    max-width: 300px; /* Limit the size of the input box */
   }
 
   button {
@@ -26,5 +32,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 0.5rem; /* Space between input and button */
+    align-self: flex-start; /* Ensure it is aligned with the input */
   }
 }

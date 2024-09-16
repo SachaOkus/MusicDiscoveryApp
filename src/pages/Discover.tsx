@@ -73,23 +73,26 @@ const Discover = () => {
     <div className="discover-container">
       {/* Search Bar */}
       <section className="search-bar">
-        <input
-          type="text"
-          placeholder="Search for tracks..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="input-group">
+          <label>Search for Tracks or Artist</label>
+          <input
+            type="text"
+            placeholder="Enter track name or artist"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} // Set search term
+          />
+        </div>
         <button onClick={handleSearch}>Search</button>
-      </section>
 
-      {/* Filter Input */}
-      <section className="filter-bar">
-        <input
-          type="text"
-          placeholder="Filter by track name or artist..."
-          value={filterTerm}
-          onChange={(e) => setFilterTerm(e.target.value)} // Set filter term
-        />
+        <div className="filter-bar">
+          <label>Filter by Name or Artist</label>
+          <input
+            type="text"
+            placeholder="Filter by track name or artist"
+            value={filterTerm}
+            onChange={(e) => setFilterTerm(e.target.value)} // Set filter term
+          />
+        </div>
       </section>
 
       {/* Track List */}
@@ -132,7 +135,7 @@ const Discover = () => {
           ) : artistDetails && !artistDetails.error ? (
             <div className="artist-details">
               <h2>{artistDetails.name}</h2>
-              <p>Sort Name: {artistDetails["sort-name"] || "Not available"}</p>
+              <p>Name: {artistDetails["sort-name"] || "Not available"}</p>
               <p>Born: {artistDetails["life-span"]?.begin || "N/A"}</p>
               <p>
                 Origin: {artistDetails["begin-area"]?.name || "Not available"}
