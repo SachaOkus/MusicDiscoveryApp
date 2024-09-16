@@ -106,9 +106,22 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Genre Selector */}
+      <section className="genre-selector">
+        <h2>Select Genre</h2>
+        <select value={selectedGenre} onChange={handleGenreChange}>
+          <option value="hiphop">Hip Hop</option>
+          <option value="electro">Electro</option>
+          <option value="pop">Pop</option>
+          <option value="rock">Rock</option>
+          <option value="jazz">Jazz</option>
+          {/* Add more genres as needed */}
+        </select>
+      </section>
+
       {/* Trending Playlists Section */}
       <section className="trending-playlists">
-        <h2>Trending Playlist</h2>
+        <h2>Trending Playlist ({selectedGenre})</h2>
         <div className="playlist-list">
           {playlists?.tracks?.length ? (
             playlists.tracks.map((playlist: any, index: number) => (

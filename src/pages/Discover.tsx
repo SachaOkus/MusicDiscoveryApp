@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { fetchItunesSearchResults } from "../API/Itunes"; // Use search function instead of trending
 import { fetchMusicBrainzArtist } from "../API/musicbrainz"; // Import MusicBrainz API
 import Modal from "../components/Modal/Modal"; // Modal component for showing artist details

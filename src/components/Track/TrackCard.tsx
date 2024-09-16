@@ -1,5 +1,3 @@
-import React from "react";
-
 const TrackCard = ({ track, onClick }: any) => (
   <div className="track-item" onClick={() => onClick(track)}>
     <img src={track.artworkUrl100} alt={track.trackName} />
