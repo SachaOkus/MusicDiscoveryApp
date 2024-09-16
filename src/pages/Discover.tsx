@@ -9,7 +9,7 @@ const Discover = () => {
   const [tracks, setTracks] = useState<Track[]>([]); // Ensure the type is Track[]
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
   const [filterTerm, setFilterTerm] = useState(""); // State for filtering tracks
-  const [selectedTrack, setSelectedTrack] = useState<any>(null); // State for the selected track
+  const [setSelectedTrack] = useState<any>(null); // State for the selected track
   const [artistDetails, setArtistDetails] = useState<any>(null); // State for artist details
   const [isModalOpen, setModalOpen] = useState(false); // Modal visibility state
   const [loading, setLoading] = useState(false); // State to show loading while fetching
