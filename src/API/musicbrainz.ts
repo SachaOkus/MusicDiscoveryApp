@@ -1,4 +1,4 @@
-const MUSICBRAINZ_API_URL = "http://musicbrainz.org/ws/2/artist";
+const MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2/artist";
 
 export const fetchMusicBrainzArtist = async (artistId: string) => {
   try {
