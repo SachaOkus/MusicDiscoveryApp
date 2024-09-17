@@ -1,50 +1,52 @@
-# React + TypeScript + Vite
+# Music Discovery App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+The Music Discovery App allows users to explore music using iTunes, MusicBrainz, and Openwhyd APIs. Users can search for tracks, view detailed artist/album information, and interact with curated playlists.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Home**: Display featured tracks from iTunes.
+- **Discover**: Search for songs using iTunes, enriched with metadata from MusicBrainz, and explore curated playlists from Openwhyd.
+- **Track Details**: View detailed track and artist information.
+- **Playlists**: Explore curated playlists and interact with them.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## UI Layout
 
-- Configure the top-level `parserOptions` property like this:
+- **Header**: Contains navigation links for Home and Discover.
+- **Main Section**: Displays featured music and search results.
+- **Styling**: SCSS is used for the overall styling.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Routing Setup
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Home Route** (/): Displays trending tracks from iTunes.
+- **Discover Route** (/discover): Search functionality using iTunes and additional metadata from MusicBrainz.
+- **Track Details Route** (/track/:id): Detailed view using iTunes, MusicBrainz, and Openwhyd.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## API Integrations
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+**iTunes API**: Fetch track previews, album artwork, and links to iTunes.
+**MusicBrainz API**: Fetch detailed artist information and album metadata.
+**Openwhyd API**: Display curated playlists for discovery.
+
+## Component Structure
+
+- **App Component**: Manages layout and routing.
+- **Home Component**: Displays featured music using the iTunes API.
+- **Discover Component**: Handles search and displays results from iTunes and MusicBrainz.
+- **Track Details Component**: Provides detailed track and artist info.
+- **SearchBar Component**: Search functionality using the iTunes API.
+
+## State Management
+
+useState and useEffect are used to manage API calls and the app’s state.
+
+## API Call Logic
+
+- **Search Music (iTunes + MusicBrainz)**: Search for songs via iTunes, fetch additional artist/album metadata from MusicBrainz.
+- **Playlists (Openwhyd)**: Display curated playlists for user exploration.
+
+## Enhancements (Optional)
+
+- **Dark Mode**: Add a toggle for dark mode.
+- **Favourites**: Allow users to favorite tracks and playlists using local storage or a backend like Firebase.
