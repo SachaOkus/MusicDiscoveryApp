@@ -25,9 +25,9 @@ The Music Discovery App allows users to explore music using iTunes, MusicBrainz,
 
 ## API Integrations
 
-**iTunes API**: Fetch track previews, album artwork, and links to iTunes.
-**MusicBrainz API**: Fetch detailed artist information and album metadata.
-**Openwhyd API**: Display curated playlists for discovery.
+- **iTunes API**: Fetch track previews, album artwork, and links to iTunes.
+- **MusicBrainz API**: Fetch detailed artist information and album metadata.
+- **Openwhyd API**: Display curated playlists for discovery.
 
 ## Component Structure
 
