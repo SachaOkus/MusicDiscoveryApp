@@ -32,7 +32,7 @@ app.get("/api/openwhyd_playlists", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://openwhyd.org/hot/${genre}?format=json`
+      `http://openwhyd.org/hot/${genre}?format=json`
     );
     if (!response.ok) {
       throw new Error(`Error fetching playlists: ${response.statusText}`);
@@ -56,7 +56,7 @@ app.get("/api/musicbrainz/artist/:mbid", async (req, res) => {
 
   try {
     const response = await fetch(
-      `http://musicbrainz.org/ws/2/artist/${mbid}?fmt=json`
+      `https://musicbrainz.org/ws/2/artist/${mbid}?fmt=json`
     );
     if (!response.ok) {
       throw new Error(`Error fetching artist data: ${response.statusText}`);

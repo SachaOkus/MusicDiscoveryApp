@@ -1,4 +1,5 @@
-const API_URL = "https://localhost:5000/api/openwhyd_playlists";
+const API_URL = "http://localhost:5000/api/openwhyd_playlists";
+// "https://openwhyd.org/hot/electro?format=json"
 
 export const fetchOpenwhydPlaylists = async (genre: string = "hiphop") => {
   try {
@@ -9,7 +10,7 @@ export const fetchOpenwhydPlaylists = async (genre: string = "hiphop") => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching playlists from backend:", error);
+    console.error("Error fetching playlists:", error);
     return [];
   }
 };
