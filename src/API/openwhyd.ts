@@ -1,4 +1,4 @@
-const API_URL = "https://openwhyd.org/hot/hiphop?format=json";
+const API_URL = "https://localhost:5000/api/openwhyd_playlists";
 
 export const fetchOpenwhydPlaylists = async (genre: string = "hiphop") => {
   try {
