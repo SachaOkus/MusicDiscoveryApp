@@ -5,9 +5,8 @@ import fetch from "node-fetch";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 
-// Route to fetch trending songs from iTunes RSS feed
 app.get("/api/trending", async (req, res) => {
   try {
     const response = await fetch(
@@ -19,7 +18,7 @@ app.get("/api/trending", async (req, res) => {
       );
     }
     const data: any = await response.json();
-    res.json(data.feed.entry); // Assuming this is where the song data resides
+    res.json(data.feed.entry);
   } catch (error) {
     console.error("Error fetching data from iTunes API:", error);
     res
@@ -28,9 +27,8 @@ app.get("/api/trending", async (req, res) => {
   }
 });
 
-// Route to fetch trending playlists from Openwhyd API
 app.get("/api/openwhyd_playlists", async (req, res) => {
-  const genre = req.query.genre || "hiphop"; // Default to hiphop if no genre provided
+  const genre = req.query.genre || "hiphop";
 
   try {
     const response = await fetch(
@@ -40,7 +38,7 @@ app.get("/api/openwhyd_playlists", async (req, res) => {
       throw new Error(`Error fetching playlists: ${response.statusText}`);
     }
     const data = await response.json();
-    res.json(data); // Send the data back to the frontend
+    res.json(data);
   } catch (error) {
     console.error(
       "Error fetching playlists from Openwhyd API:",
@@ -53,9 +51,8 @@ app.get("/api/openwhyd_playlists", async (req, res) => {
   }
 });
 
-// New route to fetch artist metadata from MusicBrainz API using correct endpoint
 app.get("/api/musicbrainz/artist/:mbid", async (req, res) => {
-  const { mbid } = req.params; // MusicBrainz artist ID (MBID)
+  const { mbid } = req.params;
 
   try {
     const response = await fetch(
@@ -66,7 +63,7 @@ app.get("/api/musicbrainz/artist/:mbid", async (req, res) => {
     }
 
     const artistData = await response.json();
-    res.json(artistData); // Send artist metadata back to the frontend
+    res.json(artistData);
   } catch (error) {
     console.error("Error fetching artist data from MusicBrainz:", error);
     res
@@ -75,9 +72,8 @@ app.get("/api/musicbrainz/artist/:mbid", async (req, res) => {
   }
 });
 
-// New route to fetch album metadata from MusicBrainz API using correct endpoint
 app.get("/api/musicbrainz/album/:mbid", async (req, res) => {
-  const { mbid } = req.params; // MusicBrainz album (release) ID (MBID)
+  const { mbid } = req.params;
 
   try {
     const response = await fetch(
@@ -88,7 +84,7 @@ app.get("/api/musicbrainz/album/:mbid", async (req, res) => {
     }
 
     const albumData = await response.json();
-    res.json(albumData); // Send album metadata back to the frontend
+    res.json(albumData);
   } catch (error) {
     console.error("Error fetching album data from MusicBrainz:", error);
     res
@@ -97,7 +93,6 @@ app.get("/api/musicbrainz/album/:mbid", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

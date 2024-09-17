@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { fetchTrendingMusic } from "../API/Itunes"; // Function to fetch iTunes data
-import { fetchOpenwhydPlaylists } from "../API/openwhyd"; // Function to fetch Openwhyd playlists
-import { Track, Playlist } from "../components/Types/types"; // Import types
-import "./_home.scss"; // Import the SCSS for styling
+import { fetchTrendingMusic } from "../API/Itunes";
+import { fetchOpenwhydPlaylists } from "../API/openwhyd";
+import { Track, Playlist } from "../components/Types/types";
+import "./_home.scss";
 
 const Home = () => {
-  const [tracks, setTracks] = useState<Track[]>([]); // State to store tracks data from iTunes
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [playlists, setPlaylists] = useState<{
     hasMore: boolean;
     tracks: Playlist[];
-  } | null>(null); // State to store playlists data from Openwhyd
+  } | null>(null);
 
-  const [selectedGenre, setSelectedGenre] = useState<string>("hiphop"); // Default genre is hip-hop
+  const [selectedGenre, setSelectedGenre] = useState<string>("hiphop");
 
-  const [loadingTracks, setLoadingTracks] = useState<boolean>(true); // Loading state for tracks
-  const [loadingPlaylists, setLoadingPlaylists] = useState<boolean>(true); // Loading state for playlists
-  const [errorTracks, setErrorTracks] = useState<string | null>(null); // Error state for tracks
-  const [errorPlaylists, setErrorPlaylists] = useState<string | null>(null); // Error state for playlists
+  const [loadingTracks, setLoadingTracks] = useState<boolean>(true);
+  const [loadingPlaylists, setLoadingPlaylists] = useState<boolean>(true);
+  const [errorTracks, setErrorTracks] = useState<string | null>(null);
+  const [errorPlaylists, setErrorPlaylists] = useState<string | null>(null);
 
-  // Fetch trending tracks from iTunes
   useEffect(() => {
     const getTracks = async () => {
       try {
@@ -33,12 +32,11 @@ const Home = () => {
     getTracks();
   }, []);
 
-  // Fetch trending playlists from Openwhyd based on selected genre
   useEffect(() => {
     const getPlaylists = async () => {
       try {
-        const data = await fetchOpenwhydPlaylists(selectedGenre.toLowerCase()); // Ensure the genre is lowercase
-        setPlaylists(data); // Set the full playlists object, including "tracks" array
+        const data = await fetchOpenwhydPlaylists(selectedGenre.toLowerCase());
+        setPlaylists(data);
       } catch (err) {
         setErrorPlaylists("Failed to fetch playlists.");
       } finally {
@@ -46,16 +44,14 @@ const Home = () => {
       }
     };
     getPlaylists();
-  }, [selectedGenre]); // Re-fetch playlists whenever the genre changes
+  }, [selectedGenre]);
 
-  // Handle genre change
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newGenre = event.target.value.toLowerCase(); // Convert to lowercase
-    setSelectedGenre(newGenre); // Update selected genre
-    setLoadingPlaylists(true); // Set loading state for playlists
+    const newGenre = event.target.value.toLowerCase();
+    setSelectedGenre(newGenre);
+    setLoadingPlaylists(true);
   };
 
-  // Handle loading and error states for both APIs
   if (loadingTracks || loadingPlaylists) {
     return <div>Loading...</div>;
   }
@@ -71,7 +67,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Featured Music Section */}
       <section className="featured-music">
         <h2>Featured Music</h2>
         <div className="track-list">
@@ -106,7 +101,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Genre Selector */}
       <section className="genre-selector">
         <h2>Select Genre</h2>
         <select value={selectedGenre} onChange={handleGenreChange}>
@@ -115,11 +109,9 @@ const Home = () => {
           <option value="pop">Pop</option>
           <option value="rock">Rock</option>
           <option value="jazz">Jazz</option>
-          {/* Add more genres as needed */}
         </select>
       </section>
 
-      {/* Trending Playlists Section */}
       <section className="trending-playlists">
         <h2>Trending Playlist ({selectedGenre})</h2>
         <div className="playlist-list">
@@ -127,16 +119,13 @@ const Home = () => {
             playlists.tracks.map((playlist: any, index: number) => (
               <div key={index} className="playlist-item">
                 <img
-                  src={
-                    playlist.img || "https://via.placeholder.com/150" // Use the correct 'img' field from the API response
-                  }
+                  src={playlist.img || "https://via.placeholder.com/150"}
                   alt={playlist.name || "Unknown playlist"}
                   className="playlist-cover"
                 />
                 <div>
                   <h3>{playlist.name || "Unknown playlist"}</h3>
                   <p>Created by: {playlist.uNm || "Unknown owner"}</p>{" "}
-                  {/* Use 'uNm' for owner */}
                   <a
                     href={playlist.trackUrl || "#"}
                     target="_blank"

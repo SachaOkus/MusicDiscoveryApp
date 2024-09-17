@@ -1,43 +1,40 @@
 import { useState } from "react";
-import { fetchItunesSearchResults } from "../API/Itunes"; // Use search function instead of trending
-import { fetchMusicBrainzArtist } from "../API/musicbrainz"; // Import MusicBrainz API
-import Modal from "../components/Modal/Modal"; // Modal component for showing artist details
+import { fetchItunesSearchResults } from "../API/Itunes";
+import { fetchMusicBrainzArtist } from "../API/musicbrainz";
+import Modal from "../components/Modal/Modal";
 import { Track } from "../components/Types/types";
 import "./_discover.scss";
 
 const Discover = () => {
-  const [tracks, setTracks] = useState<Track[]>([]); // Ensure the type is Track[]
-  const [searchTerm, setSearchTerm] = useState(""); // State for search input
-  const [filterTerm, setFilterTerm] = useState(""); // State for filtering tracks
-  const [selectedTrack, setSelectedTrack] = useState<any>(null); // State for the selected track
-  const [artistDetails, setArtistDetails] = useState<any>(null); // State for artist details
-  const [isModalOpen, setModalOpen] = useState(false); // Modal visibility state
-  const [loading, setLoading] = useState(false); // State to show loading while fetching
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTerm, setFilterTerm] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState<any>(null);
+  const [artistDetails, setArtistDetails] = useState<any>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Fetch tracks from iTunes based on search term
   const handleSearch = async () => {
-    if (!searchTerm) return; // Don't search if search term is empty
+    if (!searchTerm) return;
     try {
-      setLoading(true); // Set loading to true while fetching
-      const data = await fetchItunesSearchResults(searchTerm); // Use the correct search function
+      setLoading(true);
+      const data = await fetchItunesSearchResults(searchTerm);
       setTracks(data);
     } catch (err) {
       console.error("Error fetching tracks", err);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
-  // Fetch artist data from MusicBrainz when a track is clicked
   const handleTrackClick = async (track: any) => {
     setSelectedTrack(track);
     {
       selectedTrack && <div>Now Playing: {selectedTrack.trackName}</div>;
     }
 
-    // Search for the artist in MusicBrainz to get the MBID
     try {
-      setLoading(true); // Set loading to true while fetching artist details
+      setLoading(true);
       const searchResponse = await fetch(
         `https://musicbrainz.org/ws/2/artist/?query=artist:${track.artistName}&fmt=json`
       );
@@ -47,26 +44,24 @@ const Discover = () => {
       const searchData = await searchResponse.json();
 
       if (searchData.artists && searchData.artists.length > 0) {
-        const artistId = searchData.artists[0].id; // Get the first result's MBID
+        const artistId = searchData.artists[0].id;
 
-        // Fetch detailed artist data using the MBID
         const artistData = await fetchMusicBrainzArtist(artistId);
         setArtistDetails(artistData);
-        setModalOpen(true); // Open the modal to show artist details
+        setModalOpen(true);
       } else {
         setArtistDetails({ error: "Artist not found" });
-        setModalOpen(true); // Open the modal with the error
+        setModalOpen(true);
       }
     } catch (err) {
       console.error("Error fetching artist details", err);
       setArtistDetails({ error: "Could not fetch artist details" });
       setModalOpen(true);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
-  // Close the modal
   const handleCloseModal = () => {
     setModalOpen(false);
     setArtistDetails(null);
@@ -74,7 +69,6 @@ const Discover = () => {
 
   return (
     <div className="discover-container">
-      {/* Search Bar */}
       <section className="search-bar">
         <div className="input-group">
           <label>Search for Tracks or Artist</label>
@@ -82,7 +76,7 @@ const Discover = () => {
             type="text"
             placeholder="Enter track name or artist"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Set search term
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <button onClick={handleSearch}>Search</button>
@@ -93,12 +87,11 @@ const Discover = () => {
             type="text"
             placeholder="Filter by track name or artist"
             value={filterTerm}
-            onChange={(e) => setFilterTerm(e.target.value)} // Set filter term
+            onChange={(e) => setFilterTerm(e.target.value)}
           />
         </div>
       </section>
 
-      {/* Track List */}
       <section className="track-list">
         {loading ? (
           <p>Loading...</p>
@@ -108,10 +101,10 @@ const Discover = () => {
               (track) =>
                 track.trackName
                   .toLowerCase()
-                  .includes(filterTerm.toLowerCase()) || // Filter by track name
+                  .includes(filterTerm.toLowerCase()) ||
                 track.artistName
                   .toLowerCase()
-                  .includes(filterTerm.toLowerCase()) // Filter by artist name
+                  .includes(filterTerm.toLowerCase())
             )
             .map((track: Track, index: number) => (
               <div
@@ -130,7 +123,6 @@ const Discover = () => {
         )}
       </section>
 
-      {/* Modal for displaying artist details */}
       {isModalOpen && (
         <Modal onClose={handleCloseModal}>
           {loading ? (

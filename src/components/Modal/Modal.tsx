@@ -1,5 +1,5 @@
 import React from "react";
-import "./_modal.scss"; // Your styling for modal
+import "./_modal.scss";
 
 interface ModalProps {
   onClose: () => void;

@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Header.scss"; // Ensure this import is present
+import "./Header.scss";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to track if the side menu is open
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Toggle the side menu when hamburger is clicked
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -17,7 +16,6 @@ const Header = () => {
           <Link to="/">My Music App</Link>
         </div>
 
-        {/* Regular Nav Links for Large Screens */}
         <nav className="header__nav">
           <Link to="/" className="header__link">
             Home
@@ -27,14 +25,12 @@ const Header = () => {
           </Link>
         </nav>
 
-        {/* Hamburger Icon (Visible on small screens) */}
         <div className="hamburger" onClick={toggleMenu}>
           <div className="hamburger__line"></div>
           <div className="hamburger__line"></div>
           <div className="hamburger__line"></div>
         </div>
 
-        {/* Side Menu for Small Screens */}
         <nav className={`side-menu ${isMenuOpen ? "side-menu--open" : ""}`}>
           <Link to="/" className="side-menu__link" onClick={toggleMenu}>
             Home
@@ -44,7 +40,6 @@ const Header = () => {
           </Link>
         </nav>
 
-        {/* Dark overlay when the menu is open */}
         {isMenuOpen && <div className="overlay" onClick={toggleMenu}></div>}
       </div>
     </header>

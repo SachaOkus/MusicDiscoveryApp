@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchItunesSearchResults } from "../../API/Itunes"; // Assuming the API fetch function is here
+import { fetchItunesSearchResults } from "../../API/Itunes";
 
 interface SearchBarProps {
   onSearch: (results: any[]) => void;
@@ -12,7 +12,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     e.preventDefault();
     if (!query.trim()) return;
 
-    // Fetch the search results from iTunes API
     const results = await fetchItunesSearchResults(query);
     onSearch(results);
   };

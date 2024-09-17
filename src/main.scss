@@ -1,19 +1,13 @@
-@import "./styles/variables";
-@import "./styles/mixins";
-@import "./components/Button/buttons";
-@import "./components/Footer/Footer.scss";
 @import "./components/Header/Header.scss";
 @import "./pages/home";
 @import "./pages/discover";
 
-/* Reset margin, padding, and box-sizing */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Ensure the body, root, and the entire app take up the full viewport */
 html,
 body,
 #root {
@@ -27,24 +21,19 @@ body,
 }
 
 :root {
-  /* Set global font styles and colors */
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  /* Global color scheme */
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87); /* Text color */
-  background-color: #242424; /* Background color */
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 
-  /* Additional rendering improvements */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-// Add some global styles
 
 h1,
 h2,

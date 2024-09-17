@@ -21,24 +21,22 @@
     color: #ecf0f1;
   }
 
-  /* Regular Navigation for Large Screens */
   .header__nav {
     display: flex;
     gap: 2rem;
 
     @media (max-width: 768px) {
-      display: none; /* Hide the regular nav on small screens */
+      display: none;
     }
   }
 
-  /* Hamburger Icon (Visible on small screens) */
   .hamburger {
-    display: none; /* Hidden by default */
+    display: none;
 
     @media (max-width: 768px) {
-      display: block; /* Show hamburger icon on small screens */
+      display: block;
       cursor: pointer;
-      z-index: 1200; /* Ensure it's above the side menu */
+      z-index: 1200;
     }
 
     .hamburger__line {
@@ -49,12 +47,11 @@
     }
   }
 
-  /* Side Menu (Only for small screens) */
   .side-menu {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 0;
-    right: -250px; /* Initially hidden */
+    right: -250px;
     height: 100vh;
     width: 250px;
     background-color: #2c3e50;
@@ -62,7 +59,7 @@
     transition: right 0.3s ease-in-out;
 
     &--open {
-      right: 0; /* Show side menu when open */
+      right: 0;
     }
 
     @media (max-width: 768px) {
@@ -83,7 +80,6 @@
     }
   }
 
-  /* Dark overlay when side menu is open */
   .overlay {
     position: fixed;
     top: 0;
@@ -91,11 +87,11 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1050; /* Above everything but the side menu */
-    display: none; /* Initially hidden */
+    z-index: 1050;
+    display: none;
 
     &.overlay--visible {
-      display: block; /* Show the overlay when menu is open */
+      display: block;
     }
   }
 }

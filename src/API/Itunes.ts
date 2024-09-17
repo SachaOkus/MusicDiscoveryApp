@@ -1,9 +1,7 @@
 import { Track } from "../components/Types/types";
 
-// URL for fetching top 10 songs using the iTunes RSS Feed
 const API_URL = `https://itunes.apple.com/us/rss/topsongs/limit=10/json`;
 
-// iTunes search endpoint URL (modify according to actual API usage)
 const ITUNES_SEARCH_API_URL = `https://itunes.apple.com/search`;
 
 export const fetchTrendingMusic = async () => {
@@ -15,7 +13,7 @@ export const fetchTrendingMusic = async () => {
     }
 
     const data = await response.json();
-    return data.feed.entry; // Return the list of top songs
+    return data.feed.entry;
   } catch (error) {
     console.error("Error fetching data from the iTunes API:", error);
     return [];
@@ -36,7 +34,6 @@ export const fetchItunesSearchResults = async (
     }
     const data = await response.json();
 
-    // Map the API response to the Track structure
     return data.results.map((item: any) => ({
       trackName: item.trackName,
       artistName: item.artistName,

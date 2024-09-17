@@ -7,7 +7,7 @@ export const fetchOpenwhydPlaylists = async (genre: string = "hiphop") => {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
     const data = await response.json();
-    return data; // Adjust according to the structure of the Openwhyd response
+    return data;
   } catch (error) {
     console.error("Error fetching playlists from backend:", error);
     return [];
