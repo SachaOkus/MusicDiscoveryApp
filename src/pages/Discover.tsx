@@ -31,6 +31,9 @@ const Discover = () => {
   // Fetch artist data from MusicBrainz when a track is clicked
   const handleTrackClick = async (track: any) => {
     setSelectedTrack(track);
+    {
+      selectedTrack && <div>Now Playing: {selectedTrack.trackName}</div>;
+    }
 
     // Search for the artist in MusicBrainz to get the MBID
     try {
