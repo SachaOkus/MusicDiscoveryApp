@@ -49,4 +49,4 @@ useState and useEffect are used to manage API calls and the app’s state.
 ## Enhancements (Optional)
 
 - **Dark Mode**: Add a toggle for dark mode.
-- **Favourites**: Allow users to favorite tracks and playlists using local storage or a backend like Firebase.
+- **Favourites**: Allow users to favourite tracks and playlists using local storage or a backend like Firebase.
